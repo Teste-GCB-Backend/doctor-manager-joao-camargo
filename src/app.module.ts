@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DoctorsModule } from './doctors/doctors.module';
+import { SpecialtiesModule } from './specialties/specialties.module';
+import { DoctorSpecialtiesModule } from './doctor_specialties/doctor_specialties.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { DoctorsModule } from './doctors/doctors.module';
       migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
     }),
     DoctorsModule,
+    SpecialtiesModule,
+    DoctorSpecialtiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
