@@ -6,7 +6,7 @@ export class ForeignKey1668379780281 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE doctors
         ADD CONSTRAINT fk_adresses_doctors
         FOREIGN KEY address_doctor(addressId)
-        REFERENCES addresses(id)
+        REFERENCES address(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;`);
     }
