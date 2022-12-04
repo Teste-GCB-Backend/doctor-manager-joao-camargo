@@ -4,6 +4,7 @@ import { SpecialtiesController } from './specialties.controller';
 
 @Module({
   controllers: [SpecialtiesController],
-  providers: [SpecialtiesService]
+  providers: [SpecialtiesService],
+  exports: [SpecialtiesService]
 })
 export class SpecialtiesModule {}
