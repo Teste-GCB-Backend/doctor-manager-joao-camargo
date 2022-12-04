@@ -6,13 +6,15 @@ import { Doctor } from './entities/doctor.entity';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { AddressesService } from '../addresses/addresses.service';
+import { DoctorSpecialtiesService } from 'src/doctor_specialties/doctor_specialties.service';
 
 @Injectable()
 export class DoctorsService {
   constructor(
     @InjectRepository(Doctor)
     private doctorsRepository: Repository<Doctor>,
-    private addressesService: AddressesService
+    private addressesService: AddressesService,
+    private doctorSpecialtiesService: DoctorSpecialtiesService
   ) {}
 
 
@@ -21,7 +23,9 @@ export class DoctorsService {
 
     const addressData = await this.addressesService.findByCep(+createDoctorDto.zipCode);
     const newAddressEntity = this.addressesService.create(addressData);
-    const newDoctor = 
+    const newDoctor = this.newDoctorEntity(createDoctorDto, newAddressEntity);
+
+    await this.doctorSpecialtiesService.create(createDoctorDto.specialties, newDoctor);
 
     return 'This action adds a new doctor';
   }
@@ -56,9 +60,8 @@ export class DoctorsService {
     const newDoctor = new Doctor();
     newDoctor.name = createDoctorDto.name;
     newDoctor.crm = +createDoctorDto.crm;
-    newDoctor.landline = createDoctorDto.phone;
-    newDoctor.cellPhone = createDoctorDto.cellPhone;
-    newDoctor.specialty = createDoctorDto.specialty;
+    newDoctor.landline = +createDoctorDto.landline;
+    newDoctor.cellphone = +createDoctorDto.cellphone;
     newDoctor.address = address;
 
     return newDoctor;

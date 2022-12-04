@@ -1,4 +1,5 @@
 import { IsArray, IsNotEmpty, IsNumberString, IsString, Length } from 'class-validator';
+import { CreateSpecialtyDto } from 'src/specialties/dto/create-specialty.dto';
 
 export class CreateDoctorDto {
     @IsNotEmpty()
@@ -28,5 +29,5 @@ export class CreateDoctorDto {
 
     @IsNotEmpty()
     @IsArray()
-    specialties: string[];
+    specialties: CreateSpecialtyDto[];
 }

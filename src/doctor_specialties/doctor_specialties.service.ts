@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+
 import { CreateDoctorSpecialtyDto } from './dto/create-doctor_specialty.dto';
 import { UpdateDoctorSpecialtyDto } from './dto/update-doctor_specialty.dto';
+import { Doctor } from '../doctors/entities/doctor.entity';
+import { CreateSpecialtyDto } from '../specialties/dto/create-specialty.dto';
 
 @Injectable()
 export class DoctorSpecialtiesService {
-  create(createDoctorSpecialtyDto: CreateDoctorSpecialtyDto) {
-    return 'This action adds a new doctorSpecialty';
+  create(specialty: CreateSpecialtyDto[], doctor: Doctor) {
+    const filteredSpecialties = this.filterSpecialties(specialty);
   }
 
   findAll() {
@@ -22,5 +25,11 @@ export class DoctorSpecialtiesService {
 
   remove(id: number) {
     return `This action removes a #${id} doctorSpecialty`;
+  }
+
+  filterSpecialties(specialties: CreateSpecialtyDto[]) {
+    return specialties.filter(
+      (specialty, i) => specialties.indexOf(specialty) === i,
+    );
   }
 }
