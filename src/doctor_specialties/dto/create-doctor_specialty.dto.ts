@@ -1,1 +1,4 @@
-export class CreateDoctorSpecialtyDto {}
+export class CreateDoctorSpecialtyDto {
+    doctorId: number;
+    specialtyId: number;
+}
