@@ -20,7 +20,8 @@ export class DoctorsService {
     await this.checkIfExists(+createDoctorDto.crm);
 
     const addressData = await this.addressesService.findByCep(+createDoctorDto.zipCode);
-    const newAddressEntity = 
+    const newAddressEntity = this.addressesService.create(addressData);
+    const newDoctor = 
 
     return 'This action adds a new doctor';
   }
@@ -49,5 +50,17 @@ export class DoctorsService {
     if(isAlreadyRegistered) throw new HttpException("Médico já cadastrado", HttpStatus.CONFLICT);
 
     return;
-    }
+  }
+  
+  newDoctorEntity(createDoctorDto: CreateDoctorDto, address: Addresses) {
+    const newDoctor = new Doctor();
+    newDoctor.name = createDoctorDto.name;
+    newDoctor.crm = +createDoctorDto.crm;
+    newDoctor.landline = createDoctorDto.phone;
+    newDoctor.cellPhone = createDoctorDto.cellPhone;
+    newDoctor.specialty = createDoctorDto.specialty;
+    newDoctor.address = address;
+
+    return newDoctor;
+  }
 }

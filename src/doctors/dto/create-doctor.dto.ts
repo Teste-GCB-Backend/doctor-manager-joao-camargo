@@ -14,7 +14,7 @@ export class CreateDoctorDto {
     @IsNotEmpty()
     @IsNumberString()
     @Length(10, 10)
-    phone: string;
+    landline: string;
 
     @IsNotEmpty()
     @IsNumberString()

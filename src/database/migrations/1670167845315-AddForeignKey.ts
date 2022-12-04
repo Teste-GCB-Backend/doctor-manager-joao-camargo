@@ -4,16 +4,16 @@ export class AddForeignKeyOnSpecialtiesDoctorTable1668381458560 implements Migra
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE doctors_specialties
-        ADD CONSTRAINT fk_doctor_id
+        ADD CONSTRAINT fk_doctors_id
         FOREIGN KEY doctorId(doctorId)
         REFERENCES doctors(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;`);
 
         await queryRunner.query(`ALTER TABLE doctors_specialties
-        ADD CONSTRAINT fk_specialty_id
+        ADD CONSTRAINT fk_specialties_id
         FOREIGN KEY specialtyId(specialtyId)
-        REFERENCES specialties(id)
+        REFERENCES specialty(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE;`);
         
