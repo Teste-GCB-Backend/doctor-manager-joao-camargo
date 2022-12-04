@@ -21,8 +21,10 @@ export class DoctorSpecialtiesService {
   create(specialty: CreateSpecialtyDto[], doctor: Doctor) {
     const filteredSpecialties = this.filterSpecialties(specialty);
     this.checkDoctorSpecialtiesLength(filteredSpecialties);
-    const checkSpecialtiesExists = this.specialtiesService.find(filteredSpecialties);
-    const newDoctorSpecialties = 
+    const checkSpecialtiesExists: Specialty | any = this.specialtiesService.find(filteredSpecialties);
+    const newDoctorSpecialties = this.createNewDoctorSpecialties(checkSpecialtiesExists, doctor);
+
+    return this.doctorSpecialtiesRepository.save(newDoctorSpecialties);
   }
 
   findAll() {
