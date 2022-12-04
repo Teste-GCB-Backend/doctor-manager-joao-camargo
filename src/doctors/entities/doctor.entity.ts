@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column }  from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn }  from "typeorm"
+
+import { Addresses } from "../../addresses/entities/address.entity";
 
 @Entity()
 export class Doctor {
@@ -18,5 +20,7 @@ export class Doctor {
     cellphone: number;
 
     @Column({ type: 'int', nullable: false, unique: true, select: false })
-    address: number;
+    @OneToOne(type => Addresses, {cascade: true, eager: true})
+    @JoinColumn({name: 'address', referencedColumnName: 'id'})
+    address: Addresses;
 }
