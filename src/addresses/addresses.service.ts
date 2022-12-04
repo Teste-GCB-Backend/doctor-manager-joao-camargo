@@ -1,26 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 
 @Injectable()
 export class AddressesService {
-  create(createAddressDto: CreateAddressDto) {
-    return 'This action adds a new address';
-  }
+  constructor(private readonly httpService: HttpService) {}
 
-  findAll() {
-    return `This action returns all addresses`;
-  }
+  async findByCep(cep: number): Promise<ViaCepResponse> {
+    const response = (await this.httpService
+      .get(`https://viacep.com.br/ws/${cep}/json/`)
+      .toPromise()).data;
 
-  findOne(id: number) {
-    return `This action returns a #${id} address`;
-  }
+    if (response.erro)
+      throw new HttpException('CEP não encontrado', HttpStatus.NOT_FOUND);
 
-  update(id: number, updateAddressDto: UpdateAddressDto) {
-    return `This action updates a #${id} address`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} address`;
+    return response;
   }
 }

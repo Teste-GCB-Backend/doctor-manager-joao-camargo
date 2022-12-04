@@ -1,10 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Doctor } from './entities/doctor.entity';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { AddressesService } from '../addresses/addresses.service';
 
 @Injectable()
 export class DoctorsService {
-  create(createDoctorDto: CreateDoctorDto) {
+  constructor(
+    @InjectRepository(Doctor)
+    private doctorsRepository: Repository<Doctor>,
+    private addressesService: AddressesService
+  ) {}
+
+
+  async create(createDoctorDto: CreateDoctorDto) {
+    await this.checkIfExists(+createDoctorDto.crm);
+
+    const addressData = await this.addressesService.
+
     return 'This action adds a new doctor';
   }
 
@@ -23,4 +39,14 @@ export class DoctorsService {
   remove(id: number) {
     return `This action removes a #${id} doctor`;
   }
+
+  async checkIfExists(crm: number) {
+    const isAlreadyRegistered = await this.doctorsRepository.findOne({
+      where: { crm }
+    });
+
+    if(isAlreadyRegistered) throw new HttpException("Médico já cadastrado", HttpStatus.CONFLICT);
+
+    return;
+    }
 }
