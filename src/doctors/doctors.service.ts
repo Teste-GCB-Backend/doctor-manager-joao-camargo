@@ -19,7 +19,8 @@ export class DoctorsService {
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
 
-    const addressData = await this.addressesService.
+    const addressData = await this.addressesService.findByCep(+createDoctorDto.zipCode);
+    const newAddressEntity = 
 
     return 'This action adds a new doctor';
   }
