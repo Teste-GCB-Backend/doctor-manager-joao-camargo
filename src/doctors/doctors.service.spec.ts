@@ -127,4 +127,39 @@ describe('DoctorsService', () => {
       await expect(doctorService.findOne(1234)).rejects.toThrowError();
     });
   })
+
+  describe('findAll', () => {
+
+    it('should be defined', () => {
+      expect(doctorService.findAll).toBeDefined();
+    });
+
+    it('should return an array of doctors', async () => {
+      const doctor = await createFakeDoctor();
+      doctorRepository.find = jest.fn().mockReturnValueOnce([doctor]);
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+      doctor.doctorSpecialty = [{ specialtyId: doctor.specialties[0] }, { specialtyId: doctor.specialties[1] }]
+      doctor.addressId = addressFactory.newAddressEntity();
+
+      const result = await doctorService.findAll();
+
+      expect(result[0].name).toEqual(doctor.name);
+      expect(result[0].crm).toEqual(doctor.crm);
+      expect(result[0].street).toEqual(doctor.addressId.street);
+      expect(result[0].city).toEqual(doctor.addressId.city);
+      expect(result[0].state).toEqual(doctor.addressId.state);
+    });
+
+    it('should throw an error', async () => {
+      doctorRepository.find = jest.fn().mockRejectedValueOnce(new Error());
+
+      await expect(doctorService.findAll()).rejects.toThrowError();
+    });
+  });
 });
