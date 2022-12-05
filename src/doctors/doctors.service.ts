@@ -31,8 +31,12 @@ export class DoctorsService {
     return 'Médico cadastrado com sucesso';
   }
 
-  findAll() {
-    return `This action returns all doctors`;
+  async findAll() {
+    const doctors = await this.doctorsRepository.find({
+      relations: ['addressId', 'doctorSpecialty', 'doctorSpecialty.specialtyId']
+    });
+
+    return this.formatDoctorData(doctors);
   }
 
   findOne(id: number) {
@@ -54,6 +58,27 @@ export class DoctorsService {
     if(isAlreadyRegistered) throw new HttpException("Médico já cadastrado", HttpStatus.CONFLICT);
 
     return;
+  }
+
+  formatDoctorData(doctors: Doctors[]) {
+    return doctors.map(doctor => {
+      return {
+        name: doctor.name,
+        crm: doctor.crm,
+        landline: doctor.landline,
+        cellphone: doctor.cellphone,
+        specialties: doctor.doctorSpecialty.map((specialty) => {
+          return specialty.specialtyId.specialty;
+        }),
+        street: doctor.addressId.street,
+        number: doctor.addressId.number,
+        complement: doctor.addressId.complement,
+        neighborhood: doctor.addressId.neighborhood,
+        city: doctor.addressId.city,
+        state: doctor.addressId.state,
+        zipCode: doctor.addressId.zipCode,
+      }
+    })
   }
   
   newDoctorEntity(createDoctorDto: CreateDoctorDto, address: Addresses) {
