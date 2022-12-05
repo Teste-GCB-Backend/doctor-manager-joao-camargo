@@ -15,25 +15,33 @@ export class DoctorsService {
     @InjectRepository(Doctors)
     private doctorsRepository: Repository<Doctors>,
     private addressesService: AddressesService,
-    private doctorSpecialtiesService: DoctorSpecialtiesService
+    private doctorSpecialtiesService: DoctorSpecialtiesService,
   ) {}
-
 
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
 
-    const addressData = await this.addressesService.findByCep(+createDoctorDto.zipCode);
+    const addressData = await this.addressesService.findByCep(
+      +createDoctorDto.zipCode,
+    );
     const newAddressEntity = this.addressesService.create(addressData);
     const newDoctor = this.newDoctorEntity(createDoctorDto, newAddressEntity);
 
-    await this.doctorSpecialtiesService.create(createDoctorDto.specialties, newDoctor);
+    await this.doctorSpecialtiesService.create(
+      createDoctorDto.specialties,
+      newDoctor,
+    );
 
     return 'Médico cadastrado com sucesso';
   }
 
   async findAll() {
     const doctors = await this.doctorsRepository.find({
-      relations: ['addressId', 'doctorSpecialty', 'doctorSpecialty.specialtyId']
+      relations: [
+        'addressId',
+        'doctorSpecialty',
+        'doctorSpecialty.specialtyId',
+      ],
     });
 
     return this.formatDoctorData(doctors);
@@ -41,28 +49,36 @@ export class DoctorsService {
 
   async findOne(id: number) {
     const doctor = await this.doctorsRepository.findOne({
-      relations: ['addressId', 'doctorSpecialty', 'doctorSpecialty.specialtyId'],
-      where: { id }
-    })
+      relations: [
+        'addressId',
+        'doctorSpecialty',
+        'doctorSpecialty.specialtyId',
+      ],
+      where: { id },
+    });
 
     return this.formatDoctorData([doctor])[0];
   }
 
   async findAllByAllColumns(search: string) {
-    const doctors = await this.doctorsRepository.createQueryBuilder('doctors')
+    const doctors = await this.doctorsRepository
+      .createQueryBuilder('doctors')
       .innerJoinAndSelect('doctors.addressId', 'address')
       .innerJoinAndSelect('doctors.doctorSpecialty', 'doctorSpecialty')
       .innerJoinAndSelect('doctorSpecialty.specialtyId', 'specialty')
-      .where("doctors.id LIKE :search OR doctors.name LIKE :search OR doctors.crm LIKE :search OR doctors.landline LIKE :search OR doctors.cellphone LIKE :search OR address.street LIKE :search OR address.number LIKE :search OR address.complement LIKE :search OR address.neighborhood LIKE :search OR address.city LIKE :search OR address.state LIKE :search OR address.zipCode LIKE :search OR specialty.specialty LIKE :search", { search: `%${search}%` })
+      .where(
+        'doctors.id LIKE :search OR doctors.name LIKE :search OR doctors.crm LIKE :search OR doctors.landline LIKE :search OR doctors.cellphone LIKE :search OR address.street LIKE :search OR address.number LIKE :search OR address.complement LIKE :search OR address.neighborhood LIKE :search OR address.city LIKE :search OR address.state LIKE :search OR address.zipCode LIKE :search OR specialty.specialty LIKE :search',
+        { search: `%${search}%` },
+      )
       .getMany();
-    
-    return this.formatDoctorData(doctors);
 
+    return this.formatDoctorData(doctors);
   }
 
   async findAllByFilter(filter: { key: string }) {
     try {
-      const doctors = await this.doctorsRepository.createQueryBuilder('doctors')
+      const doctors = await this.doctorsRepository
+        .createQueryBuilder('doctors')
         .innerJoinAndSelect('doctors.addressId', 'address')
         .innerJoinAndSelect('doctors.doctorSpecialty', 'doctorSpecialty')
         .innerJoinAndSelect('doctorSpecialty.specialtyId', 'specialty')
@@ -71,9 +87,11 @@ export class DoctorsService {
 
       return this.formatDoctorData(doctors);
     } catch (error) {
-      throw new HttpException('Parâmetro inválido de filtragem inválido', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Parâmetro inválido de filtragem inválido',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-
   }
 
   update(id: number, updateDoctorDto: UpdateDoctorDto) {
@@ -86,15 +104,16 @@ export class DoctorsService {
 
   async checkIfExists(crm: number) {
     const isAlreadyRegistered = await this.doctorsRepository.findOne({
-      where: { crm }
+      where: { crm },
     });
-    if(isAlreadyRegistered) throw new HttpException("Médico já cadastrado", HttpStatus.CONFLICT);
+    if (isAlreadyRegistered)
+      throw new HttpException('Médico já cadastrado', HttpStatus.CONFLICT);
 
     return;
   }
 
   formatDoctorData(doctors: Doctors[]) {
-    return doctors.map(doctor => {
+    return doctors.map((doctor) => {
       return {
         id: doctor.id,
         name: doctor.name,
@@ -111,10 +130,10 @@ export class DoctorsService {
         city: doctor.addressId.city,
         state: doctor.addressId.state,
         zipCode: doctor.addressId.zipCode,
-      }
-    })
+      };
+    });
   }
-  
+
   newDoctorEntity(createDoctorDto: CreateDoctorDto, address: Addresses) {
     const newDoctor = new Doctors();
     newDoctor.name = createDoctorDto.name;
