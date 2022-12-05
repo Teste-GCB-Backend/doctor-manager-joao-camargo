@@ -19,7 +19,6 @@ export class SpecialtiesService {
       specialties: specialties,
     })
       .getMany();
-    
     if(specialtiesArr.length !== specialties.length) {
       throw new HttpException(
         'Verifique se as especialidades informadas estão corretas',

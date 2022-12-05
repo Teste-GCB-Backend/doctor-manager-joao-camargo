@@ -16,7 +16,7 @@ export class AddressesService {
     newAddress.neighborhood = createAddressDto.bairro
     newAddress.city = createAddressDto.localidade
     newAddress.state = createAddressDto.uf
-    newAddress.zipCode = +createAddressDto.cep
+    newAddress.zipCode = +createAddressDto.cep.replace('-', '')
 
 
     return newAddress;

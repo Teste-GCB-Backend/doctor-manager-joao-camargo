@@ -2,18 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Doctor } from './entities/doctor.entity';
+import { Doctors } from './entities/doctor.entity';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { AddressesService } from '../addresses/addresses.service';
-import { DoctorSpecialtiesService } from 'src/doctor_specialties/doctor_specialties.service';
+import { DoctorSpecialtiesService } from '../doctor_specialties/doctor_specialties.service';
 import type { Addresses } from '../addresses/entities/address.entity';
 
 @Injectable()
 export class DoctorsService {
   constructor(
-    @InjectRepository(Doctor)
-    private doctorsRepository: Repository<Doctor>,
+    @InjectRepository(Doctors)
+    private doctorsRepository: Repository<Doctors>,
     private addressesService: AddressesService,
     private doctorSpecialtiesService: DoctorSpecialtiesService
   ) {}
@@ -28,7 +28,7 @@ export class DoctorsService {
 
     await this.doctorSpecialtiesService.create(createDoctorDto.specialties, newDoctor);
 
-    return 'This action adds a new doctor';
+    return 'Médico cadastrado com sucesso';
   }
 
   findAll() {
@@ -51,19 +51,18 @@ export class DoctorsService {
     const isAlreadyRegistered = await this.doctorsRepository.findOne({
       where: { crm }
     });
-
     if(isAlreadyRegistered) throw new HttpException("Médico já cadastrado", HttpStatus.CONFLICT);
 
     return;
   }
   
   newDoctorEntity(createDoctorDto: CreateDoctorDto, address: Addresses) {
-    const newDoctor = new Doctor();
+    const newDoctor = new Doctors();
     newDoctor.name = createDoctorDto.name;
     newDoctor.crm = +createDoctorDto.crm;
     newDoctor.landline = +createDoctorDto.landline;
     newDoctor.cellphone = +createDoctorDto.cellphone;
-    newDoctor.address = address;
+    newDoctor.addressId = address;
 
     return newDoctor;
   }

@@ -1,11 +1,10 @@
-import { type } from "os";
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn }  from "typeorm"
 
 import { Addresses } from "../../addresses/entities/address.entity";
 import { DoctorSpecialty } from "../../doctor_specialties/entities/doctor_specialty.entity";
 
 @Entity()
-export class Doctor {
+export class Doctors {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -23,8 +22,8 @@ export class Doctor {
 
     @Column({ type: 'int', nullable: false, unique: true, select: false })
     @OneToOne(type => Addresses, {cascade: true, eager: true})
-    @JoinColumn({name: 'address', referencedColumnName: 'id'})
-    address: Addresses;
+    @JoinColumn({name: 'addressId', referencedColumnName: 'id'})
+    addressId: Addresses;
 
     @OneToMany(type => DoctorSpecialty, doctorSpecialty => doctorSpecialty.doctorId)
     doctorSpecialty: DoctorSpecialty[];

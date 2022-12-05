@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+
 import { DoctorsModule } from './doctors/doctors.module';
 import { SpecialtiesModule } from './specialties/specialties.module';
 import { DoctorSpecialtiesModule } from './doctor_specialties/doctor_specialties.module';
@@ -26,7 +25,5 @@ import { AddressesModule } from './addresses/addresses.module';
     DoctorSpecialtiesModule,
     AddressesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

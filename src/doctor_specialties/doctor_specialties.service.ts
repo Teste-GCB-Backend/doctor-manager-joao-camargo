@@ -2,9 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateDoctorSpecialtyDto } from './dto/create-doctor_specialty.dto';
 import { UpdateDoctorSpecialtyDto } from './dto/update-doctor_specialty.dto';
-import { Doctor } from '../doctors/entities/doctor.entity';
+import { Doctors } from '../doctors/entities/doctor.entity';
 import { CreateSpecialtyDto } from '../specialties/dto/create-specialty.dto';
 import { DoctorSpecialty } from './entities/doctor_specialty.entity';
 import { SpecialtiesService } from '../specialties/specialties.service';
@@ -18,13 +17,14 @@ export class DoctorSpecialtiesService {
     private specialtiesService: SpecialtiesService,
   ) {}
 
-  create(specialty: CreateSpecialtyDto[], doctor: Doctor) {
+  async create(specialty: CreateSpecialtyDto[], doctor: Doctors) {
     const filteredSpecialties = this.filterSpecialties(specialty);
     this.checkDoctorSpecialtiesLength(filteredSpecialties);
-    const checkSpecialtiesExists: Specialty | any = this.specialtiesService.find(filteredSpecialties);
+    const checkSpecialtiesExists: Specialty | any = await this.specialtiesService.find(filteredSpecialties);
     const newDoctorSpecialties = this.createNewDoctorSpecialties(checkSpecialtiesExists, doctor);
 
     return this.doctorSpecialtiesRepository.save(newDoctorSpecialties);
+    
   }
 
   findAll() {
@@ -59,12 +59,12 @@ export class DoctorSpecialtiesService {
     return;
   }
 
-  createNewDoctorSpecialties(specialties: Specialty[], doctor: Doctor) {
+  createNewDoctorSpecialties(specialties: Specialty[], doctor: Doctors) {
     return specialties.map((specialty: Specialty) => {
       return {
         doctorId: doctor,
         specialtyId: specialty,
-      };
+      }
     });
   }
 
