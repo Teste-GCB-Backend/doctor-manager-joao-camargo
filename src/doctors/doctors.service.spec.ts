@@ -71,6 +71,19 @@ describe('DoctorsService', () => {
       ).toBe(null);
     });
 
+    it('should throw an error if the doctor already exists', async () => {
+      const createdDoctor = await createFakeDoctor();
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+      jest.spyOn(spy, 'checkIfExists').mockRejectedValueOnce(new Error())
+
+      await expect(doctorService.create(createdDoctor)).rejects.toThrowError();
+    });
+
     it('should throw an exception', () => {
       jest
         .spyOn(doctorSpecialtiesService, 'create')
@@ -79,4 +92,39 @@ describe('DoctorsService', () => {
       expect(doctorService.create).rejects.toThrowError();
     });
   });
+
+  describe('findOne', () => {
+   
+    it('should be defined', () => {
+      expect(doctorService.findOne).toBeDefined();
+    });
+      
+    it('should return a doctor entity', async () => {
+      const doctor = await createFakeDoctor();
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+      doctor.doctorSpecialty = [{ specialtyId: doctor.specialties[0] }, { specialtyId: doctor.specialties[1] }]
+      doctor.addressId = addressFactory.newAddressEntity();
+      
+      jest.spyOn(spy, 'checkIfExists').mockReturnValueOnce(doctor);
+      jest.spyOn(doctorRepository, 'findOne').mockReturnValueOnce(doctor);
+
+      const result = await doctorService.findOne(doctor.id);
+      
+      expect(result.crm).toEqual(doctor.crm);
+      expect(result.name).toEqual(doctor.name);
+      expect(result.street).toEqual(doctor.addressId.street);
+      expect(result.city).toEqual(doctor.addressId.city);
+      expect(result.state).toEqual(doctor.addressId.state);
+    });
+    
+    it('should throw an error', async () => {
+      doctorRepository.findOne = jest.fn().mockRejectedValueOnce(new Error());
+
+      await expect(doctorService.findOne(1234)).rejects.toThrowError();
+    });
+  })
 });

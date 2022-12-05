@@ -20,7 +20,6 @@ export class DoctorsService {
 
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
-    console.log(this.addressesService.findByCep)
     const addressData = await this.addressesService.findByCep(
       +createDoctorDto.zipCode,
     );
