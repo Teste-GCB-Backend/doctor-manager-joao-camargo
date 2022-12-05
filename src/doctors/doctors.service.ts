@@ -70,7 +70,7 @@ export class DoctorsService {
         { search: `%${search}%` },
       )
       .getMany();
-
+    
     return this.formatDoctorData(doctors);
   }
 

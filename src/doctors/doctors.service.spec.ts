@@ -162,4 +162,95 @@ describe('DoctorsService', () => {
       await expect(doctorService.findAll()).rejects.toThrowError();
     });
   });
+
+  describe("findAllByAllColumns", () => {
+
+    it('should be defined', () => {
+      expect(doctorService.findAllByAllColumns).toBeDefined();
+    });
+
+    it('should return an array of doctors', async () => {
+      const doctor = await createFakeDoctor();
+      doctorRepository.createQueryBuilder = jest
+        .fn()
+        .mockImplementation(() => ({
+          innerJoinAndSelect: jest.fn().mockReturnThis(),
+          where: jest.fn().mockReturnThis(),
+          andWhere: jest.fn().mockReturnThis(),
+          getMany: jest.fn().mockResolvedValue([doctor]),
+        }));
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+      doctor.doctorSpecialty = [{ specialtyId: doctor.specialties[0] }, { specialtyId: doctor.specialties[1] }]
+      doctor.addressId = addressFactory.newAddressEntity();
+
+      const result = await spy.findAllByAllColumns('1234');
+
+      expect(result[0].name).toEqual(doctor.name);
+      expect(result[0].crm).toEqual(doctor.crm);
+      expect(result[0].street).toEqual(doctor.addressId.street);
+      expect(result[0].city).toEqual(doctor.addressId.city);
+      expect(result[0].state).toEqual(doctor.addressId.state);
+    });
+
+    it('should throw an error', async () => {
+      doctorRepository.createQueryBuilder = jest
+        .fn()
+        .mockImplementation(() => ({
+          innerJoinAndSelect: jest.fn().mockReturnThis(),
+          where: jest.fn().mockReturnThis(),
+          andWhere: jest.fn().mockReturnThis(),
+          getMany: jest.fn().mockResolvedValue(new Error()),
+        }));
+      
+      doctorService.formatDoctorData = jest.fn().mockReturnValueOnce(null);
+
+      await doctorService.findAllByAllColumns('123').then(() => {
+        expect(doctorService.formatDoctorData).toHaveBeenCalled();
+      }).catch(() => {
+      expect(doctorService.findAllByAllColumns('123')).rejects.toThrowError();
+    });
+    });
+  });
+
+  describe("findAllByFilter", () => {
+
+    it('should be defined', () => {
+      expect(doctorService.findAllByFilter).toBeDefined();
+    });
+
+    it('should return an array of doctors', async () => {
+      const doctor = await createFakeDoctor();
+      doctorRepository.createQueryBuilder = jest
+        .fn()
+        .mockImplementation(() => ({
+          innerJoinAndSelect: jest.fn().mockReturnThis(),
+          where: jest.fn().mockReturnThis(),
+          andWhere: jest.fn().mockReturnThis(),
+          getMany: jest.fn().mockResolvedValue([doctor]),
+        }));
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+      doctor.doctorSpecialty = [{ specialtyId: doctor.specialties[0] }, { specialtyId: doctor.specialties[1] }]
+      doctor.addressId = addressFactory.newAddressEntity();
+
+      const result = await spy.findAllByFilter({key: "1"});
+
+      expect(result[0].name).toEqual(doctor.name);
+      expect(result[0].crm).toEqual(doctor.crm);
+      expect(result[0].street).toEqual(doctor.addressId.street);
+      expect(result[0].city).toEqual(doctor.addressId.city);
+      expect(result[0].state).toEqual(doctor.addressId.state);
+    });
+  });
 });

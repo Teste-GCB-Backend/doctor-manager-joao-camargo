@@ -7,7 +7,7 @@ import { Doctors } from '../doctors/entities/doctor.entity';
 import { CreateSpecialtyDto } from '../specialties/dto/create-specialty.dto';
 import { DoctorSpecialty } from './entities/doctor_specialty.entity';
 import { SpecialtiesService } from '../specialties/specialties.service';
-import { Specialty } from 'src/specialties/entities/specialty.entity';
+import { Specialty } from '../specialties/entities/specialty.entity';
 
 @Injectable()
 export class DoctorSpecialtiesService {
@@ -52,7 +52,7 @@ export class DoctorSpecialtiesService {
   checkDoctorSpecialtiesLength(specialties: CreateSpecialtyDto[]) {
     if (specialties.length < 2) {
       throw new HttpException(
-        'Médico deve ter ao menos duas especialidades',
+        'Médico deve possuir ao menos duas especialidades',
         HttpStatus.BAD_REQUEST,
       );
     }
