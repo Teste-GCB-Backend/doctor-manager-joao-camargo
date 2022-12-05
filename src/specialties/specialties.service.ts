@@ -14,12 +14,14 @@ export class SpecialtiesService {
   ) {}
 
   async find(specialties: CreateSpecialtyDto[]) {
-    const specialtiesArr = await this.specialtiesRepository.createQueryBuilder('specialties')
-    .where('specialties.specialty IN (:...specialties)', {
-      specialties: specialties,
-    })
+    const specialtiesArr = await this.specialtiesRepository
+      .createQueryBuilder('specialties')
+      .where('specialties.specialty IN (:...specialties)', {
+        specialties: specialties,
+      })
       .getMany();
-    if(specialtiesArr.length !== specialties.length) {
+    
+    if (specialtiesArr.length !== specialties.length) {
       throw new HttpException(
         'Verifique se as especialidades informadas estão corretas',
         HttpStatus.BAD_REQUEST,
