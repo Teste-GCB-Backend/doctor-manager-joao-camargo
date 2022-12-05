@@ -27,4 +27,7 @@ export class Addresses {
     @Column({ type: 'int', width: 8, nullable: false })
     zipCode: number;
 
+    constructor(data?: Partial<Addresses>) {
+        Object.assign(this, data);
+    }
 }

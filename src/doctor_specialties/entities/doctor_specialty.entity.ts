@@ -16,4 +16,8 @@ export class DoctorSpecialty {
     @OneToOne(type => Specialty, { cascade: true, eager: true })
     @JoinColumn({name: 'specialtyId', referencedColumnName: 'id'})
     specialtyId: Specialty;
+
+    constructor(data?: Partial<DoctorSpecialty>) {
+        Object.assign(this, data);
+    }
 }

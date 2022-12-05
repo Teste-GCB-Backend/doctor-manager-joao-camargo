@@ -27,4 +27,8 @@ export class Doctors {
 
     @OneToMany(type => DoctorSpecialty, doctorSpecialty => doctorSpecialty.doctorId)
     doctorSpecialty: DoctorSpecialty[];
+
+    constructor(data?: Partial<Doctors>) {
+        Object.assign(this, data);
+    }
 }

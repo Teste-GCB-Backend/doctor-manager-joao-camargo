@@ -7,4 +7,8 @@ export class Specialty {
 
     @Column({type: 'varchar', length: 120, nullable: false})
     specialty: string;
+
+    constructor(data?: Partial<Specialty>) {
+        Object.assign(this, data);
+    }
 }

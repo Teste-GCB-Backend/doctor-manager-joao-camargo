@@ -20,7 +20,7 @@ export class DoctorsService {
 
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
-
+    console.log(this.addressesService.findByCep)
     const addressData = await this.addressesService.findByCep(
       +createDoctorDto.zipCode,
     );
@@ -99,7 +99,6 @@ export class DoctorsService {
   }
 
   remove(id: number) {
-    console.log(process.env.);
     return `This action removes a #${id} doctor`;
   }
 
@@ -136,12 +135,13 @@ export class DoctorsService {
   }
 
   newDoctorEntity(createDoctorDto: CreateDoctorDto, address: Addresses) {
-    const newDoctor = new Doctors();
-    newDoctor.name = createDoctorDto.name;
-    newDoctor.crm = +createDoctorDto.crm;
-    newDoctor.landline = +createDoctorDto.landline;
-    newDoctor.cellphone = +createDoctorDto.cellphone;
-    newDoctor.addressId = address;
+    const newDoctor = new Doctors({
+      name: createDoctorDto.name,
+      crm: +createDoctorDto.crm,
+      landline: +createDoctorDto.landline,
+      cellphone: +createDoctorDto.cellphone,
+      addressId: address,
+    });
 
     return newDoctor;
   }
