@@ -39,8 +39,13 @@ export class DoctorsService {
     return this.formatDoctorData(doctors);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+  async findOne(id: number) {
+    const doctor = await this.doctorsRepository.findOne({
+      relations: ['addressId', 'doctorSpecialty', 'doctorSpecialty.specialtyId'],
+      where: { id }
+    })
+    
+    return this.formatDoctorData([doctor]);
   }
 
   update(id: number, updateDoctorDto: UpdateDoctorDto) {
@@ -63,6 +68,7 @@ export class DoctorsService {
   formatDoctorData(doctors: Doctors[]) {
     return doctors.map(doctor => {
       return {
+        id: doctor.id,
         name: doctor.name,
         crm: doctor.crm,
         landline: doctor.landline,
