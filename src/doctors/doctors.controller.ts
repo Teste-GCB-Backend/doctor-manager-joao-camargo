@@ -23,6 +23,11 @@ export class DoctorsController {
     return this.doctorsService.findOne(+id);
   }
 
+  @Get("search/:search")
+  findAllByAllColumns(@Param('search') search: string) {
+    return this.doctorsService.findAllByAllColumns(search);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
     return this.doctorsService.update(+id, updateDoctorDto);

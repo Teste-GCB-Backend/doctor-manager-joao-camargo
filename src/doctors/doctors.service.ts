@@ -44,8 +44,20 @@ export class DoctorsService {
       relations: ['addressId', 'doctorSpecialty', 'doctorSpecialty.specialtyId'],
       where: { id }
     })
+
+    return this.formatDoctorData([doctor])[0];
+  }
+
+  async findAllByAllColumns(search: string) {
+    const doctors = await this.doctorsRepository.createQueryBuilder('doctors')
+      .innerJoinAndSelect('doctors.addressId', 'address')
+      .innerJoinAndSelect('doctors.doctorSpecialty', 'doctorSpecialty')
+      .innerJoinAndSelect('doctorSpecialty.specialtyId', 'specialty')
+      .where("doctors.id LIKE :search OR doctors.name LIKE :search OR doctors.crm LIKE :search OR doctors.landline LIKE :search OR doctors.cellphone LIKE :search OR address.street LIKE :search OR address.number LIKE :search OR address.complement LIKE :search OR address.neighborhood LIKE :search OR address.city LIKE :search OR address.state LIKE :search OR address.zipCode LIKE :search OR specialty.specialty LIKE :search", { search: `%${search}%` })
+      .getMany();
     
-    return this.formatDoctorData([doctor]);
+    return this.formatDoctorData(doctors);
+
   }
 
   update(id: number, updateDoctorDto: UpdateDoctorDto) {
