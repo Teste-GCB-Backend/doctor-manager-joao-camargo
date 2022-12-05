@@ -1,0 +1,33 @@
+version: '3'
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "3000:3000"
+    command: bash -c "npm run test"
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    container_name: db
+    ports:
+      - ${TYPEORM_PORT}:${TYPEORM_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TYPEORM_PASSWORD}
+      MYSQL_DATABASE: ${TYPEORM_DATABASE}
+      MYSQL_USER: ${TYPEORM_USERNAME}
+      MYSQL_PASSWORD: ${TYPEORM_PASSWORD}
+      MYSQL_TCP_PORT: ${TYPEORM_PORT}
+    volumes:
+      - db_data:/var/lib/mysql
+volumes:
+  db_data:

@@ -21,7 +21,12 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/config/typeorm.config-migrations.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/config/typeorm.config-migrations.ts"
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/config/typeorm.config-migrations.ts",
+    "test:load-envs": "dotenv -e .env.test",
+    "test:docker": "npm run test:compose -- up",
+    "test:compose": "docker-compose -f docker-compose.test.yml --env-file .env.test",
+    "test:migrate": "npm run test:load-envs && npm run typeorm migration:run",
+    "test:compose-down": "npm run test:compose -- down"
   },
   "dependencies": {
     "@nestjs/axios": "^1.0.0",

@@ -99,6 +99,7 @@ export class DoctorsService {
   }
 
   remove(id: number) {
+    console.log(process.env.);
     return `This action removes a #${id} doctor`;
   }
 
