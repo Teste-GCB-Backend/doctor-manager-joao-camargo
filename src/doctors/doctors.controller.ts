@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -26,6 +26,11 @@ export class DoctorsController {
   @Get("search/:search")
   findAllByAllColumns(@Param('search') search: string) {
     return this.doctorsService.findAllByAllColumns(search);
+  }
+
+  @Get("filter")
+  async findByFilter(@Query() query) {
+    return this.doctorsService.findAllByFilter(query);
   }
 
   @Patch(':id')

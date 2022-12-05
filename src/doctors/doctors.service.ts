@@ -60,6 +60,22 @@ export class DoctorsService {
 
   }
 
+  async findAllByFilter(filter: { key: string }) {
+    try {
+      const doctors = await this.doctorsRepository.createQueryBuilder('doctors')
+        .innerJoinAndSelect('doctors.addressId', 'address')
+        .innerJoinAndSelect('doctors.doctorSpecialty', 'doctorSpecialty')
+        .innerJoinAndSelect('doctorSpecialty.specialtyId', 'specialty')
+        .where(`${Object.keys(filter)} = :${Object.keys(filter)}`, filter)
+        .getMany();
+
+      return this.formatDoctorData(doctors);
+    } catch (error) {
+      throw new HttpException('Parâmetro inválido de filtragem inválido', HttpStatus.BAD_REQUEST);
+    }
+
+  }
+
   update(id: number, updateDoctorDto: UpdateDoctorDto) {
     return `This action updates a #${id} doctor`;
   }
