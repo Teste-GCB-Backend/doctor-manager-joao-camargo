@@ -13,9 +13,9 @@ jobs:
       NODE_ENV: production
       TYPEORM_CONNECTION: ${{ secrets.TYPEORM_CONNECTION }}
       TYPEORM_HOST: ${{ secrets.TYPEORM_HOST }}
-      TYPEORM_USERNAME: ${{ secrets.TYPEORM_USER }}
+      TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
       TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
-      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DB }}
+      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DATABASE }}
       TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
       TYPEORM_ENTITIES: src/**/*.entity.ts
       TYPEORM_ENTITIES_DIR: src/entities
@@ -33,7 +33,7 @@ jobs:
           docker run -v $GITHUB_WORKSPACE:/usr/app node:16.15-alpine sh -c "cd /usr/app && node .github/workflows/scripts/generate-env-file.js"
         env:
           SECRETS: ${{ toJson(secrets) }}
-          
+
       - name: Build
         run: docker-compose build
 

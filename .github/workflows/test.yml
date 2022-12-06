@@ -7,7 +7,7 @@ on:
 env:
   TYPEORM_CONNECTION: mysql
   TYPEORM_HOST: db
-  TYPEORM_USERNAME: ${{ secrets.TYPEORM_USER }}
+  TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
   TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
   TYPEORM_DATABASE: practice-gcb-joao-camargo-test
   TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
