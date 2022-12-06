@@ -35,4 +35,4 @@ jobs:
           SECRETS: ${{ toJson(secrets) }}
 
       - name: Build&Test
-        run: npm run test:docker
+        run: npm run test:docker-workflow
