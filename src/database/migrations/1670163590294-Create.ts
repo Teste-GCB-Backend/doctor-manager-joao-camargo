@@ -1,10 +1,9 @@
 import { Table } from "typeorm";
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Create1670163590294 implements MigrationInterface {
+export class Create1668371614582 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createDatabase('practice-gcb-joao-camargo', true)
         await queryRunner.createTable(new Table({
             name: "doctors",
             columns: [

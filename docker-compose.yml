@@ -6,14 +6,11 @@ services:
       dockerfile: Dockerfile
     container_name: app
     ports:
-      - "3000:3000"
+      - $API_PORT:3000
     command: npm run start
     restart: always
     env_file:
       - .env
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
     depends_on:
       - db
   db:
@@ -27,8 +24,5 @@ services:
       MYSQL_USER: ${TYPEORM_USERNAME}
       MYSQL_PASSWORD: ${TYPEORM_PASSWORD}
       MYSQL_TCP_PORT: ${TYPEORM_PORT}
-    volumes:
-      - db_data:/var/lib/mysql
-volumes:
-  db_data:
+
   
