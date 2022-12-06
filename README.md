@@ -33,11 +33,13 @@ Esta é uma API de cadastro e visualização de médicos. Com ela é possivel ad
 Estrutura do banco de dados: Para o desenvolvimento dessa API me referenciei em possíveis features futuras, visando possibilitar um menor prejuízo aos dados já salvos em caso de nova feature, portanto criei uma tabela de endereços, uma tabela ponte entre as especialidades, uma tabela para as especialidades (que são adicionadas por seed) e uma tabela para os médicos. 
 
 
-Status: ✅ Completa
+Status de desenvolvimento: ✅ API Completa
+
+Tempo de código (Wakatime): 10h19min
 
 ***
 
-## :computer:	 Tecnologias e Conceitos e Informações Úteis
+## :computer:	 Tecnologias e Conceitos
 
 - Nest.js
 - TypeORM
@@ -48,8 +50,6 @@ Status: ✅ Completa
 - Docker
 - CI/CD
 - AWS
-
-Tempo de código (Wakatime): 10h19min
 
 ***
 
@@ -129,7 +129,9 @@ Primeiro, faça o clone desse repositório na sua maquina:
 git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
 ```
 
-Substitua o nome do arquivo '.env.example' para '.env'. Certifique-se de que a porta indicada no .env está disponivel.
+
+O segundo passo é substituir o nome do arquivo '.env.example' para '.env'. Certifique-se de que a porta indicada no .env está disponivel.
+
 
 Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 
@@ -156,7 +158,10 @@ Primeiro, faça o clone desse repositório na sua maquina:
 git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
 ```
 
-Substitua o nome do arquivo '.env.test.example' para '.env.test' . Certifique-se de que a porta indicada no .env está disponivel.
+
+Substitua o nome do arquivo '.env.test.example' para '.env.test' . Certifique-se de que a porta indicada no .env.test está disponivel.
+
+
 
 Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 
