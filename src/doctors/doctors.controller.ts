@@ -8,9 +8,10 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
-import { ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiFoundResponse, ApiOperation, ApiProperty, ApiQuery } from '@nestjs/swagger';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { FilterDoctor } from './dto/filter-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Controller('doctors')
@@ -30,8 +31,11 @@ export class DoctorsController {
     return this.doctorsService.findAll();
   }
 
+  @ApiOperation({
+    description: "Retorna os médicos que atendem ao filtro, sendo possível usar apenas UM filtro por vez."
+  })
   @Get('filter')
-  async findByFilter(@Query() query) {
+  async findByFilter(@Query() query: FilterDoctor) {
     return this.doctorsService.findAllByFilter(query);
   }
 
@@ -40,6 +44,9 @@ export class DoctorsController {
     return this.doctorsService.findOne(+id);
   }
 
+  @ApiOperation({
+    description: "Retorna os médicos que contenham, em parte ou por completo, alguma coluna salva com o parametro de busca."
+  })
   @Get('search/:search')
   findAllByAllColumns(@Param('search') search: string) {
     return this.doctorsService.findAllByAllColumns(search);

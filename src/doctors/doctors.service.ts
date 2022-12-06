@@ -24,7 +24,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
     const addressData = await this.addressesService.findByCep(
-      +createDoctorDto.zipCode,
+      createDoctorDto.zipCode,
     );
     const newAddressEntity = this.addressesService.create(addressData);
     const newDoctor = this.newDoctorEntity(createDoctorDto, newAddressEntity);
@@ -82,7 +82,8 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
     return this.formatDoctorData(doctors);
   }
 
-  async findAllByFilter(filter: { key: string }) {
+  async findAllByFilter(filter: { key: string } | any) {
+    
     try {
       const doctors = await this.doctorsRepository
         .createQueryBuilder('doctors')
@@ -116,7 +117,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
 
     if (findDoctor.addressId.zipCode !== +updateDoctorDto.zipCode) {
       const addressData = await this.addressesService.findByCep(
-        +updateDoctorDto.zipCode,
+        updateDoctorDto.zipCode,
       );
       const newAddressEntity = this.addressesService.create(addressData);
       findDoctor.addressId = newAddressEntity;

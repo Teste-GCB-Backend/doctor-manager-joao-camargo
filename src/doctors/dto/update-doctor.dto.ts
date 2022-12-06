@@ -41,7 +41,7 @@ export class UpdateDoctorDto extends PartialType(CreateDoctorDto) {
     cellphone: string;
 
     @ApiProperty({
-        example: '12345678',
+        example: '01310100',
         description: 'CEP do médico contendo 8 dígitos, sem pontos ou traços',
     })
     @IsNotEmpty()

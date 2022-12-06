@@ -22,16 +22,22 @@ export class AddressesService {
     return newAddress;
   }
 
-  async findByCep(cep: number): Promise<ViaCepResponse> {
-    const response = (
-      await this.httpService
-        .get(`https://viacep.com.br/ws/${cep}/json/`)
-        .toPromise()
-    ).data;
+  async findByCep(cep: string): Promise<ViaCepResponse> {
 
-    if (response.erro)
+    try {
+      const response = (
+        await this.httpService
+          .get(`https://viacep.com.br/ws/${cep}/json/`)
+          .toPromise()
+      ).data;
+  
+      if (response.erro)
+        throw new HttpException('CEP não encontrado', HttpStatus.NOT_FOUND);
+  
+      return response;
+    } catch (error) {
       throw new HttpException('CEP não encontrado', HttpStatus.NOT_FOUND);
-
-    return response;
+    }
+    
   }
 }
