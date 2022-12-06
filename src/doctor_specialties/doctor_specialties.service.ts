@@ -8,6 +8,7 @@ import { CreateSpecialtyDto } from '../specialties/dto/create-specialty.dto';
 import { DoctorSpecialty } from './entities/doctor_specialty.entity';
 import { SpecialtiesService } from '../specialties/specialties.service';
 import { Specialty } from '../specialties/entities/specialty.entity';
+import { UpdateDoctorDto } from 'src/doctors/dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorSpecialtiesService {
@@ -27,16 +28,16 @@ export class DoctorSpecialtiesService {
     
   }
 
-  findAll() {
-    return `This action returns all doctorSpecialties`;
-  }
+  async update(updateDoctorDto: UpdateDoctorDto, doctor: Doctors) {
+    const specialties = updateDoctorDto.specialties;
+    const filteredSpecialties = this.filterSpecialties(specialties);
+    this.checkDoctorSpecialtiesLength(filteredSpecialties);
+    const checkSpecialtiesExists: Specialty | any = await this.specialtiesService.find(filteredSpecialties);
+    const newDoctorSpecialties = this.createNewDoctorSpecialties(checkSpecialtiesExists, doctor);
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctorSpecialty`;
-  }
+    await this.doctorSpecialtiesRepository.delete({ doctorId: doctor });
 
-  update(id: number, updateDoctorSpecialtyDto: UpdateDoctorSpecialtyDto) {
-    return `This action updates a #${id} doctorSpecialty`;
+    return this.doctorSpecialtiesRepository.save(newDoctorSpecialties);
   }
 
   remove(id: number) {

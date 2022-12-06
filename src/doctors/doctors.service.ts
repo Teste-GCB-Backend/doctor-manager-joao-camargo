@@ -70,7 +70,7 @@ export class DoctorsService {
         { search: `%${search}%` },
       )
       .getMany();
-    
+
     return this.formatDoctorData(doctors);
   }
 
@@ -93,8 +93,42 @@ export class DoctorsService {
     }
   }
 
-  update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    return `This action updates a #${id} doctor`;
+  async update(id: number, updateDoctorDto: UpdateDoctorDto) {
+    const findDoctor = await this.doctorsRepository.findOne({
+      where: { id },
+      relations: [
+        'addressId',
+        'doctorSpecialty',
+        'doctorSpecialty.specialtyId',
+      ],
+    });
+
+    if(!findDoctor) throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
+
+    if (findDoctor.addressId.zipCode !== +updateDoctorDto.zipCode) {
+      const addressData = await this.addressesService.findByCep(
+        +updateDoctorDto.zipCode,
+      );
+      const newAddressEntity = this.addressesService.create(addressData);
+      findDoctor.addressId = newAddressEntity;
+    }
+
+    if (findDoctor.crm !== +updateDoctorDto.crm) {
+      try {
+        await this.checkIfExists(+updateDoctorDto.crm);
+      } catch (error) {
+        throw new HttpException('Não é possivel cadastrar esse CRM, pois ele já está na base de dados', HttpStatus.CONFLICT);
+      }
+    }
+
+    findDoctor.name = updateDoctorDto.name;
+    findDoctor.crm = +updateDoctorDto.crm;
+    findDoctor.landline = +updateDoctorDto.landline;
+    findDoctor.cellphone = +updateDoctorDto.cellphone;
+
+    await this.doctorSpecialtiesService.update(updateDoctorDto, findDoctor);
+
+    return 'Médico atualizado com sucesso';
   }
 
   remove(id: number) {

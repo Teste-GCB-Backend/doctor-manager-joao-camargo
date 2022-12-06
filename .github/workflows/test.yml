@@ -1,0 +1,31 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+env:
+  TYPEORM_CONNECTION: mysql
+  TYPEORM_HOST: db
+  TYPEORM_USERNAME: joao
+  TYPEORM_PASSWORD: joao
+  TYPEORM_DATABASE: practice-gcb-joao-camargo-test
+  TYPEORM_PORT: 3308
+  TYPEORM_ENTITIES: src/**/*.entity.ts
+  TYPEORM_ENTITIES_DIR: src/entities
+  TYPEORM_MIGRATIONS: src/database/migrations/**/*.ts
+  TYPEORM_MIGRATIONS_DIR: src/database/migrations
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build
+        run:
+
+      - name: Test
+        run:
