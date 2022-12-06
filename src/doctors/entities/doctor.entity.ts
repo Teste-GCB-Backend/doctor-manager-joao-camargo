@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn }  from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, JoinColumn, DeleteDateColumn }  from "typeorm"
 
 import { Addresses } from "../../addresses/entities/address.entity";
 import { DoctorSpecialty } from "../../doctor_specialties/entities/doctor_specialty.entity";
@@ -27,6 +27,9 @@ export class Doctors {
 
     @OneToMany(type => DoctorSpecialty, doctorSpecialty => doctorSpecialty.doctorId)
     doctorSpecialty: DoctorSpecialty[];
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
 
     constructor(data?: Partial<Doctors>) {
         Object.assign(this, data);

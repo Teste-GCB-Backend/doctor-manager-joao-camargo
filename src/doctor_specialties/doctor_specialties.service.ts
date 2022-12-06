@@ -40,10 +40,6 @@ export class DoctorSpecialtiesService {
     return this.doctorSpecialtiesRepository.save(newDoctorSpecialties);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctorSpecialty`;
-  }
-
   filterSpecialties(specialties: CreateSpecialtyDto[]) {
     return specialties.filter(
       (specialty, i) => specialties.indexOf(specialty) === i,

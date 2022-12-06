@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TypeOrmQueryService } from '@nestjs-query/query-typeorm';
 
 import { Doctors } from './entities/doctor.entity';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
@@ -10,13 +11,15 @@ import { DoctorSpecialtiesService } from '../doctor_specialties/doctor_specialti
 import type { Addresses } from '../addresses/entities/address.entity';
 
 @Injectable()
-export class DoctorsService {
+export class DoctorsService extends TypeOrmQueryService<Doctors> {
   constructor(
     @InjectRepository(Doctors)
     private doctorsRepository: Repository<Doctors>,
     private addressesService: AddressesService,
     private doctorSpecialtiesService: DoctorSpecialtiesService,
-  ) {}
+  ) {
+    super(doctorsRepository, { useSoftDelete: true });
+  }
 
   async create(createDoctorDto: CreateDoctorDto) {
     await this.checkIfExists(+createDoctorDto.crm);
@@ -47,16 +50,21 @@ export class DoctorsService {
   }
 
   async findOne(id: number) {
-    const doctor = await this.doctorsRepository.findOne({
-      relations: [
-        'addressId',
-        'doctorSpecialty',
-        'doctorSpecialty.specialtyId',
-      ],
-      where: { id },
-    });
-
-    return this.formatDoctorData([doctor])[0];
+    return await this.doctorsRepository
+      .findOneOrFail({
+        relations: [
+          'addressId',
+          'doctorSpecialty',
+          'doctorSpecialty.specialtyId',
+        ],
+        where: { id },
+      })
+      .then((doctor) => {
+        return this.formatDoctorData([doctor])[0];
+      })
+      .catch((error) => {
+        throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
+      });
   }
 
   async findAllByAllColumns(search: string) {
@@ -103,7 +111,8 @@ export class DoctorsService {
       ],
     });
 
-    if(!findDoctor) throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
+    if (!findDoctor)
+      throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
 
     if (findDoctor.addressId.zipCode !== +updateDoctorDto.zipCode) {
       const addressData = await this.addressesService.findByCep(
@@ -117,7 +126,10 @@ export class DoctorsService {
       try {
         await this.checkIfExists(+updateDoctorDto.crm);
       } catch (error) {
-        throw new HttpException('Não é possivel cadastrar esse CRM, pois ele já está na base de dados', HttpStatus.CONFLICT);
+        throw new HttpException(
+          'Não é possivel cadastrar esse CRM, pois ele já está na base de dados',
+          HttpStatus.CONFLICT,
+        );
       }
     }
 
@@ -131,8 +143,13 @@ export class DoctorsService {
     return 'Médico atualizado com sucesso';
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctor`;
+  async remove(id: number) {
+    const deletedDoctor = await this.doctorsRepository.softDelete(id);
+
+    if (deletedDoctor.raw.affectedRows === 0)
+      throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
+
+    return 'Médico deletado com sucesso';
   }
 
   async checkIfExists(crm: number) {

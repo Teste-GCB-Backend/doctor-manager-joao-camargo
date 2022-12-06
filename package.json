@@ -23,15 +23,16 @@
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/config/typeorm.config-migrations.ts",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/config/typeorm.config-migrations.ts",
     "test:load-envs": "dotenv -e .env.test",
-    "test:docker": "npm run test:compose -- up",
+    "test:docker": "npm run test:compose-down && npm run test:compose -- up",
     "test:compose": "docker-compose -f docker-compose.test.yml --env-file .env.test",
-    "test:migrate": "npm run test:load-envs && npm run typeorm migration:run",
+    "test:migrate": "npm run test:load-envs && npm run typeorm migration:run && npm run seed:run",
     "test:compose-down": "npm run test:compose -- down",
     "ci:build": "docker-compose -f docker-compose.test.yml build",
     "ci:test": "docker-compose -f docker-compose.test.yml run app bash -c 'npm run test:load-envs && npm run test:migrate && npm run seed:run && npm run test'"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
+    "@nestjs-query/query-typeorm": "^0.30.0",
     "@nestjs/axios": "^1.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
