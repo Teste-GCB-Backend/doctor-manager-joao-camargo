@@ -9,7 +9,7 @@ export class SpecialtyCreate implements Seeder {
             { specialty: 'Alergologia' },
             { specialty: 'Angiologia' },
             { specialty: 'Buco maxilo' },
-            { specialty: 'Cardiologia clínca' },
+            { specialty: 'Cardiologia clínica' },
             { specialty: 'Cardiologia infantil' },
             { specialty: 'Cirurgia cabeça e pescoço' },
             { specialty: 'Cirurgia cardíaca' },

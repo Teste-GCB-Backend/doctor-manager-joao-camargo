@@ -1,3 +1,5 @@
+# <p align = "center"> Teste Técnico Desenvolvedor Backend Jr. </p>
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -22,52 +24,150 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+##  :clipboard: Descrição
 
-```bash
-$ npm install
+Esta é uma API de cadastro e visualização de médicos. Com ela é possivel adicionar um médico com duas ou mais especialidades, consultar médicos cadastrados pelo Id, por um filtro qualquer (como demonstrado abaixo) ou buscando por termos em toda a tabela. Além disso, é possível editar e remover um médico. O projeto está documentado no Swagger, deployado em uma instância da AWS e configurado com CI/CD.
+
+Estrutura do banco de dados: Para o desenvolvimento dessa API me referenciei em possíveis features futuras, visando possibilitar um menor prejuízo aos dados já salvos em caso de nova feature, portanto criei uma tabela de endereços, uma tabela ponte entre as especialidades, uma tabela para as especialidades (que são adicionadas por seed) e uma tabela para os médicos. 
+
+
+Status: ✅ Completa
+
+***
+
+## :computer:	 Tecnologias e Conceitos e Informações Úteis
+
+- Nest.js
+- TypeORM
+- TypeORM Seeding
+- ClassValidator
+- MySQL
+- Swagger
+- Docker
+- CI/CD
+- AWS
+
+Tempo de código (Wakatime): 10h19min
+
+***
+
+## :rocket: Rotas
+
+```yml 
+GET /doctors
+    - Rota para listar todos os médicos
+    - headers: {}
+    - body: {}
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```yml
+POST /doctors
+    - Rota para cadastrar um novo médico
+    - headers: {}
+    - body:{
+        "name": string,
+        "crm": string de números,
+        "landline": string de números,
+        "cellphone": string de números,
+        "zipCode": string de números,
+        "specialties": array de strings (valores possíveis: [ "Alergologia", "Angiologia", "Buco maxilo", "Cardiologia clínica", "Cardiologia infantil", "Cirurgia cabeça e pescoço", "Cirurgia cardíaca", "Cirurgia de tórax" ])
+}
+```
+    
+```yml 
+GET /doctors/:id
+    - Rota para listar um médico pelo id
+    - headers: {}
+    - body: {}
 ```
 
-## Test
+```yml
+GET /doctors/filter?:filter
+    - Rota para listar médicos que atenda determinado filtro. Possíveis filtros: name, crm, landline, cellphone, street, number, complement, neighborhood, city, state, zipCode e specialty. 
+    - headers: {}
+    - body: {}
+``` 
 
-```bash
-# unit tests
-$ npm run test
+```yml
+GET /doctors/search/:search
+    - Rota para listar médicos que contenha o parâmetro buscado, por completo ou em partes, em qualquer coluna do banco de dados.
+    - headers: {}
+    - body: {}
+``` 
 
-# e2e tests
-$ npm run test:e2e
+```yml
+PUT /doctors/:id 
+    - Rota para atualizar um médico pelo id
+    - headers: {}
+    - body: {
+        "name": string,
+        "crm": string de números,
+        "landline": string de números,
+        "cellphone": string de números,
+        "zipCode": string de números,
+        "specialties": array de strings (valores possíveis: [ "Alergologia", "Angiologia", "Buco maxilo", "Cardiologia clínica", "Cardiologia infantil", "Cirurgia cabeça e pescoço", "Cirurgia cardíaca", "Cirurgia de tórax" ])
+    }
+```
+ 
+```yml
+DELETE /doctors/:id
+    - Rota para deletar um médico pelo id
+    - headers: {}
+    - body: {}
+```
+***
 
-# test coverage
-$ npm run test:cov
+## 🏁 Rodando a aplicação
+
+Certifique-se que voce tem a ultima versão estável do [Docker](https://www.docker.com/) rodando localmente.
+
+Primeiro, faça o clone desse repositório na sua maquina:
+
+```
+git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
 ```
 
-## Support
+Substitua o nome do arquivo '.env.example' para '.env'. Certifique-se de que a porta indicada no .env está disponivel.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 
-## Stay in touch
+```
+npm run start:docker
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Acompanhe os logs do container, certifique de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
 
-## License
+```
+npm run typeorm:run && npm run seed:run
+```
 
-Nest is [MIT licensed](LICENSE).
+Pronto! A aplicação estará rodando na porta 3000.
+
+
+## 🏁 Rodando os testes
+
+Certifique-se que voce tem a ultima versão estável do [Docker](https://www.docker.com/) rodando localmente.
+
+Primeiro, faça o clone desse repositório na sua maquina:
+
+```
+git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
+```
+
+Substitua o nome do arquivo '.env.test.example' para '.env.test' . Certifique-se de que a porta indicada no .env está disponivel.
+
+Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
+
+```
+npm run test:docker
+```
+
+Acompanhe os logs do container, certifique de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
+
+```
+npm run typeorm:run && npm run seed:run
+```
+
+Pronto! Os testes serão executados.

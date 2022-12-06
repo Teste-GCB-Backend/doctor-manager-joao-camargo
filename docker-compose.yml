@@ -7,7 +7,7 @@ services:
     container_name: app
     ports:
       - "3000:3000"
-    command: npm run start:dev
+    command: npm run start
     restart: always
     env_file:
       - .env

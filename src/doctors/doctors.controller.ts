@@ -3,13 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
-  UsePipes,
-  ValidationPipe,
   Query,
+  Put,
 } from '@nestjs/common';
+import { ApiCreatedResponse } from '@nestjs/swagger';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
@@ -18,8 +17,10 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
+  @ApiCreatedResponse({
+    type: CreateDoctorDto,
+  })
   @Post()
-  @UsePipes(ValidationPipe)
   create(@Body() createDoctorDto: CreateDoctorDto) {
     return this.doctorsService.create(createDoctorDto);
   }
@@ -44,7 +45,7 @@ export class DoctorsController {
     return this.doctorsService.findAllByAllColumns(search);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
     return this.doctorsService.update(+id, updateDoctorDto);
   }
