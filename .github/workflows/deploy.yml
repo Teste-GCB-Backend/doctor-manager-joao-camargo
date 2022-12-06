@@ -21,6 +21,7 @@ jobs:
       TYPEORM_ENTITIES_DIR: src/entities
       TYPEORM_MIGRATIONS: src/database/migrations/**/*.ts
       TYPEORM_MIGRATIONS_DIR: src/database/migrations
+      API_PORT: ${{ secrets.API_PORT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
