@@ -136,10 +136,10 @@ O segundo passo é substituir o nome do arquivo '.env.example' para '.env'. Cert
 Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 
 ```
-npm run start:docker
+docker-compose up
 ```
 
-Acompanhe os logs do container, certifique de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
+Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. Certifique-se de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
 
 ```
 npm run typeorm:run && npm run seed:run
@@ -169,7 +169,7 @@ Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 npm run test:docker
 ```
 
-Acompanhe os logs do container, certifique de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
+Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. Certifique-se de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
 
 ```
 npm run typeorm:run && npm run seed:run

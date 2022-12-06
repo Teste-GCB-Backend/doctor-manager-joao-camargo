@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - main
+      - master
+
+name: Build and Deploy
+jobs:
+  build:
+    runs-on: aws
+    timeout-minutes: 20
+    env: 
+      NODE_ENV: production
+      TYPEORM_CONNECTION: ${{ secrets.TYPEORM_CONNECTION }}
+      TYPEORM_HOST: ${{ secrets.TYPEORM_HOST }}
+      TYPEORM_USERNAME: ${{ secrets.TYPEORM_USER }}
+      TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
+      TYPEORM_DATABASE: ${{ secrets.TYPEORM_DB }}
+      TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
+      TYPEORM_ENTITIES: src/**/*.entity.ts
+      TYPEORM_ENTITIES_DIR: src/entities
+      TYPEORM_MIGRATIONS: src/database/migrations/**/*.ts
+      TYPEORM_MIGRATIONS_DIR: src/database/migrations
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: docker-compose build
+
+      - name: Run
+        run: docker-compose down && docker-compose up

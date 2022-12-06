@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: app
     ports:
-      - "3000:3000"
+      - $API_PORT:3000
     command: bash -c "npm run test"
     restart: always
     env_file:

@@ -24,5 +24,8 @@ services:
       MYSQL_USER: ${TYPEORM_USERNAME}
       MYSQL_PASSWORD: ${TYPEORM_PASSWORD}
       MYSQL_TCP_PORT: ${TYPEORM_PORT}
-
+    volumes:
+      - db_data:/var/lib/mysql
+volumes:
+  db_data:
   
