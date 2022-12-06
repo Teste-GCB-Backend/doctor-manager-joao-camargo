@@ -123,7 +123,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
       findDoctor.addressId = newAddressEntity;
     }
 
-    if (findDoctor.crm !== +updateDoctorDto.crm) {
+    if (findDoctor.crm != +updateDoctorDto.crm) {
       try {
         await this.checkIfExists(+updateDoctorDto.crm);
       } catch (error) {
