@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - master
+      - TestWorkflow
 env:
   TYPEORM_CONNECTION: mysql
   TYPEORM_HOST: db
