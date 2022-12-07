@@ -12,3 +12,16 @@ export function createFakeDoctor(): CreateDoctorDto | any {
         specialties: ["Cardiologia infantil", "Cirurgia de tórax"]
     };
 }
+
+export function createFakeDoctorWithDoctorDto() {
+    const doctor = createFakeDoctor();
+    
+    return {
+        ...doctor,
+        crm: doctor.crm.toString(),
+        landline: doctor.phone.toString(),
+        cellphone: doctor.cellphone.toString(),
+        zipCode: `0${doctor.zipCode}`,
+    }
+    
+}
