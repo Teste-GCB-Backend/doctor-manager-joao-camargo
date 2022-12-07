@@ -101,6 +101,7 @@ describe('DoctorsService', () => {
       
     it('should return a doctor entity', async () => {
       const doctor = await createFakeDoctor();
+      doctorRepository.findOneOrFail = jest.fn().mockResolvedValueOnce(doctor);
       const spy = new DoctorsService(
         doctorRepository,
         addressesService,
