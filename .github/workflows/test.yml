@@ -6,16 +6,16 @@ on:
       - master
       - TestWorkflow
 env:
-  TYPEORM_CONNECTION: mysql
-  TYPEORM_HOST: db
+  TYPEORM_CONNECTION: "mysql"
+  TYPEORM_HOST: "db"
   TYPEORM_USERNAME: ${{ secrets.TYPEORM_USERNAME }}
   TYPEORM_PASSWORD: ${{ secrets.TYPEORM_PASSWORD }}
-  TYPEORM_DATABASE: practice-gcb-joao-camargo-test
+  TYPEORM_DATABASE: "practice-gcb-joao-camargo-test"
   TYPEORM_PORT: ${{ secrets.TYPEORM_PORT }}
-  TYPEORM_ENTITIES: src/**/*.entity.ts
-  TYPEORM_ENTITIES_DIR: src/entities
-  TYPEORM_MIGRATIONS: src/database/migrations/**/*.ts
-  TYPEORM_MIGRATIONS_DIR: src/database/migrations
+  TYPEORM_ENTITIES: "src/**/*.entity.ts"
+  TYPEORM_ENTITIES_DIR: "src/entities"
+  TYPEORM_MIGRATIONS: "src/database/migrations/**/*.ts"
+  TYPEORM_MIGRATIONS_DIR: "src/database/migrations"
   API_PORT: ${{ secrets.API_PORT }}
 jobs:
   test:
