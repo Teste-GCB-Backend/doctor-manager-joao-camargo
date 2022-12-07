@@ -96,7 +96,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
       return this.formatDoctorData(doctors);
     } catch (error) {
       throw new HttpException(
-        'Parâmetro inválido de filtragem inválido',
+        'Parâmetro inválido de filtragem inválido. Certifique-se de utilizar apenas um filtro por vez',
         HttpStatus.BAD_REQUEST,
       );
     }

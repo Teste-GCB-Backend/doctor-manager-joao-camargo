@@ -45,7 +45,7 @@ export class DoctorsController {
   }
 
   @ApiOperation({
-    description: "Retorna os médicos que contenham, em parte ou por completo, alguma coluna salva com o parametro de busca."
+    description: "Retorna os médicos que contenham, em parte ou por completo, alguma coluna salva com o parametro de busca. Exemplo: /search/João retorna todos os médicos que possuem João em alguma coluna."
   })
   @Get('search/:search')
   findAllByAllColumns(@Param('search') search: string) {
