@@ -5,6 +5,8 @@ import { Factory, Seeder } from "typeorm-seeding";
 export class SpecialtyCreate implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<void> {
 
+        if (await connection.getRepository(Specialty).count() > 0) return;
+        
         await connection.createQueryBuilder().insert().into(Specialty).values([
             { specialty: 'Alergologia' },
             { specialty: 'Angiologia' },

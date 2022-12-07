@@ -9,7 +9,9 @@ import { AddressesModule } from './addresses/addresses.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `env.${process.env.NODE_ENV}`,
+    }),
     TypeOrmModule.forRoot({
       type: process.env.TYPEORM_CONNECTION,
       host: process.env.TYPEORM_HOST,

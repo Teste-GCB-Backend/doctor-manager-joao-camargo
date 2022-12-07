@@ -94,7 +94,7 @@ describe('DoctorsService', () => {
   });
 
   describe('findOne', () => {
-   
+   console.log(process.env.TYPEORM_DATABASE)
     it('should be defined', () => {
       expect(doctorService.findOne).toBeDefined();
     });

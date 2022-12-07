@@ -30,12 +30,12 @@
 
 Esta é uma API de cadastro e visualização de médicos. Com ela é possivel adicionar um médico com duas ou mais especialidades, consultar médicos cadastrados pelo Id, por um filtro qualquer (como demonstrado abaixo) ou buscando por termos em toda a tabela. Além disso, é possível editar e remover um médico. O projeto está documentado no Swagger, deployado em uma instância da AWS e configurado com CI/CD.
 
-Estrutura do banco de dados: Para o desenvolvimento dessa API me referenciei em possíveis features futuras, visando possibilitar um menor prejuízo aos dados já salvos em caso de nova feature, portanto criei uma tabela de endereços, uma tabela ponte entre as especialidades, uma tabela para as especialidades (que são adicionadas por seed) e uma tabela para os médicos. 
+Estrutura do banco de dados: Para o desenvolvimento dessa API me referenciei em possíveis features futuras, visando possibilitar um menor prejuízo aos dados já salvos em caso de nova feature. Portanto, criei uma tabela de endereços, uma tabela ponte entre as especialidades, uma tabela para as especialidades (que são adicionadas por seed) e uma tabela para os médicos. 
 
 
 Status de desenvolvimento: ✅ API Completa
 
-Tempo de código (Wakatime): 10h19min
+Tempo de código (Wakatime): 16h21min
 
 ***
 
@@ -162,11 +162,16 @@ git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
 Substitua o nome do arquivo '.env.test.example' para '.env.test' . Certifique-se de que a porta indicada no .env.test está disponivel.
 
 
+Dentro da pasta, execute o código a seguir para buildar. Por motivos de conflito de versão, não utilize o script de build disponível no package.json.
+
+```
+docker-compose -f docker-compose.test.yml build
+```
 
 Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 
 ```
-npm run test:docker
+npm run test:docker-local
 ```
 
 Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. Certifique-se de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
