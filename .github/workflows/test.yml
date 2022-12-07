@@ -28,4 +28,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build&Test
-        run: npm run test:docker-workflow
+        run: npm run test:workflow
