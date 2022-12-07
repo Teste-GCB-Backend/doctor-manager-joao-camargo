@@ -98,8 +98,6 @@ describe('doctors controller (e2e)', () => {
             .post('/doctors')
             .send(doctor);
     
-          console.log(promise);
-    
           expect(promise.status).toBe(409);
           expect(promise.text).toBe(
             '{"statusCode":409,"message":"Médico já cadastrado"}',
@@ -128,6 +126,43 @@ describe('doctors controller (e2e)', () => {
           expect(promise.text).toBe(
             '{"statusCode":400,"message":"Verifique se as especialidades informadas estão corretas"}',
           );
+        });
+    });
+    
+    describe('GET /doctors', () => {
+        it('should return a list of doctors', async () => {
+          const doctor = await createFakeDoctorWithDoctorDto();
+          const address = addressFactory.newAddressEntity();
+    
+          await getConnection()
+            .getRepository(Doctors)
+            .save({
+              name: doctor.name,
+              crm: doctor.crm,
+              landline: doctor.phone,
+              cellphone: doctor.cellphone,
+              addressId: new Addresses(address),
+            });
+    
+          const promise = await request(app.getHttpServer()).get('/doctors').send();
+    
+          expect(promise.status).toBe(200);
+          expect(promise.body).toMatchObject([
+              {
+              name: doctor.name,
+              crm: +doctor.crm,
+              landline: `${doctor.phone}`,
+              cellphone: doctor.cellphone,
+              street: address.street,
+              number: address.number,
+              neighborhood: address.neighborhood,
+              complement: address.complement,
+              city: address.city,
+              state: address.state,
+              zipCode: address.zipCode,
+              specialties: [],
+            },
+          ]);
         });
       });
 });

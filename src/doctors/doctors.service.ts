@@ -28,7 +28,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
     );
     const newAddressEntity = this.addressesService.create(addressData);
     const newDoctor = this.newDoctorEntity(createDoctorDto, newAddressEntity);
-      console.log(newDoctor)
+
     await this.doctorSpecialtiesService.create(
       createDoctorDto.specialties,
       newDoctor,
