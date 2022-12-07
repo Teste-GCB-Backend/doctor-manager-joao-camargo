@@ -21,9 +21,6 @@ services:
       - TYPEORM_MIGRATIONS='src/database/migrations/**/*.ts'
       - TYPEORM_MIGRATIONS_DIR='src/database/migrations'
       - API_PORT=${API_PORT}
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
     depends_on:
       - db
   db:
