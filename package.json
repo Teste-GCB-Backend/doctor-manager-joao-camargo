@@ -28,7 +28,7 @@
     "docker:compose": "docker-compose up --build",
     "docker:compose-down": "docker-compose down",
     "typeorm:run": "npm run typeorm -- migration:run",
-    "script:test": "npm run typeorm:run && npm run seed:run && npm run test:e2e"
+    "script:test": "npm run typeorm:run && npm run seed:run && npm run test:e2e && npm run test"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",

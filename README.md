@@ -32,6 +32,9 @@ Esta é uma API de cadastro e visualização de médicos. Com ela é possivel ad
 
 Estrutura do banco de dados: Para o desenvolvimento dessa API me referenciei em possíveis features futuras, visando possibilitar um menor prejuízo aos dados já salvos em caso de nova feature. Portanto, criei uma tabela de endereços, uma tabela ponte entre as especialidades, uma tabela para as especialidades (que são adicionadas por seed) e uma tabela para os médicos. 
 
+Você pode acessar ela pelos links: [Link-principal](http://ec2-44-204-240-80.compute-1.amazonaws.com/) [Link-alternativo](http://teste-tecnico-gcb.tk/)
+
+A documentação pode ser acessada pelo recurso /api: [Documentação](http://ec2-44-204-240-80.compute-1.amazonaws.com/api)
 
 Status de desenvolvimento: ✅ API Completa
 
