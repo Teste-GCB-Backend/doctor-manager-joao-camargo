@@ -10,17 +10,17 @@ services:
     command: bash -c "npm run test"
     restart: always
     environment:
-      - TYPEORM_CONNECTION: 'mysql'
-      - TYPEORM_HOST: 'db'
-      - TYPEORM_USERNAME: ${TYPEORM_USERNAME}
-      - TYPEORM_PASSWORD: ${TYPEORM_PASSWORD}
-      - TYPEORM_DATABASE: 'practice-gcb-joao-camargo-test'
-      - TYPEORM_PORT: ${TYPEORM_PORT}
-      - TYPEORM_ENTITIES: 'src/**/*.entity.ts'
-      - TYPEORM_ENTITIES_DIR: 'src/entities'
-      - TYPEORM_MIGRATIONS: 'src/database/migrations/**/*.ts'
-      - TYPEORM_MIGRATIONS_DIR: 'src/database/migrations'
-      - API_PORT: ${API_PORT}
+      - TYPEORM_CONNECTION='mysql'
+      - TYPEORM_HOST='db'
+      - TYPEORM_USERNAME=${TYPEORM_USERNAME}
+      - TYPEORM_PASSWORD=${TYPEORM_PASSWORD}
+      - TYPEORM_DATABASE='practice-gcb-joao-camargo-test'
+      - TYPEORM_PORT=${TYPEORM_PORT}
+      - TYPEORM_ENTITIES='src/**/*.entity.ts'
+      - TYPEORM_ENTITIES_DIR='src/entities'
+      - TYPEORM_MIGRATIONS='src/database/migrations/**/*.ts'
+      - TYPEORM_MIGRATIONS_DIR='src/database/migrations'
+      - API_PORT=${API_PORT}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
