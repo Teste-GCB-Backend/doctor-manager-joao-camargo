@@ -164,5 +164,42 @@ describe('doctors controller (e2e)', () => {
             },
           ]);
         });
+    });
+    
+    describe('PUT /doctors/:id', () => {
+        it('should update a doctor', async () => {
+          const doctor = await createFakeDoctorWithDoctorDto();
+          const address = addressFactory.newAddressEntity();
+          const doctorCreated = await getConnection()
+            .getRepository(Doctors)
+            .save({
+              name: doctor.name,
+              crm: doctor.crm,
+              landline: doctor.phone,
+              cellphone: doctor.cellphone,
+              addressId: new Addresses(address),
+            });
+            console.log(doctorCreated);
+          doctor.name = 'teste';
+          doctor.crm = '1234567';
+    
+          const promise = await request(app.getHttpServer())
+            .put(`/doctors/${doctorCreated.id}`)
+              .send(doctor);
+            
+          expect(promise.status).toBe(200);
+          expect(promise.text).toBe('Médico atualizado com sucesso');
+        });
+
+        it('should update throw an error if doctor doesnt exist', async () => {
+            const doctor = await createFakeDoctorWithDoctorDto();
+
+            const promise = await request(app.getHttpServer())
+              .put(`/doctors/99999999999`)
+                .send(doctor);
+              
+            expect(promise.status).toBe(404);
+            expect(promise.text).toBe('{"statusCode":404,"message":"Médico não encontrado"}');
+          });
       });
 });

@@ -4,7 +4,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app
-RUN yarn install --legacy-peer-deps
+RUN yarn install --legacy-peer-deps --network-timeout 100000
 
 COPY . /usr/src/app
 

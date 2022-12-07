@@ -111,7 +111,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
         'doctorSpecialty.specialtyId',
       ],
     });
-
+    
     if (!findDoctor)
       throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
 
