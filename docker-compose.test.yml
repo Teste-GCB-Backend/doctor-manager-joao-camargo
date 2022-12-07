@@ -3,7 +3,7 @@ services:
   app:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.test
     container_name: app
     ports:
       - ${API_PORT}:${API_PORT}

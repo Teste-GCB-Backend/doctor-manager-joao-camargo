@@ -36,7 +36,7 @@ jobs:
           SECRETS: ${{ toJson(secrets) }}
 
       - name: Build
-        run: docker-compose build --no-cache
+        run: docker-compose build
 
       - name: Run
         run: docker-compose down && docker-compose up

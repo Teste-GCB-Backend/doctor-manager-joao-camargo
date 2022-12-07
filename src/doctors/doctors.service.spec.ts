@@ -8,6 +8,7 @@ import { Doctors } from './entities/doctor.entity';
 import { DoctorSpecialtiesService } from '../doctor_specialties/doctor_specialties.service';
 import { createFakeDoctor } from '../../test/factories/doctor.factory';
 import addressFactory from '../../test/factories/address.factory';
+import { HttpException } from '@nestjs/common';
 
 describe('DoctorsService', () => {
   let doctorService: DoctorsService;
@@ -94,7 +95,6 @@ describe('DoctorsService', () => {
   });
 
   describe('findOne', () => {
-   console.log(process.env.TYPEORM_DATABASE)
     it('should be defined', () => {
       expect(doctorService.findOne).toBeDefined();
     });
@@ -252,6 +252,210 @@ describe('DoctorsService', () => {
       expect(result[0].street).toEqual(doctor.addressId.street);
       expect(result[0].city).toEqual(doctor.addressId.city);
       expect(result[0].state).toEqual(doctor.addressId.state);
+    });
+  });
+
+  describe('update', () => {
+    it('should be defined', () => {
+      expect(doctorService.update).toBeDefined();
+    });
+
+    it('should update a doctor entity successfully', async () => {
+      const createdDoctor = await createFakeDoctor();
+
+      jest.spyOn(doctorRepository, 'findOne').mockImplementationOnce(() =>
+        Promise.resolve({
+          ...createdDoctor,
+          addressId: {
+            zipCode: createdDoctor.zipCode,
+          },
+        }),
+      );
+
+      addressesService.create = jest.fn().mockReturnValueOnce(null);
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+      const result = await doctorService.update(1, createdDoctor);
+
+      expect(result).toEqual('Médico atualizado com sucesso');
+      expect(doctorSpecialtiesService.update).toHaveBeenCalledTimes(1);
+      expect(addressesService.create(createdDoctor)).toBe(null);
+    });
+
+    it('should throw an exception if doctor does not exist', async () => {
+      jest
+        .spyOn(doctorRepository, 'findOne')
+        .mockImplementationOnce(() => Promise.resolve(null));
+
+      await doctorService
+        .update(1, await createFakeDoctor())
+        .catch((e) => {
+          expect(e).toBeInstanceOf(HttpException);
+        })
+        .then((data) => {
+          expect(data).toBeUndefined();
+        });
+    });
+
+    it('should create new address entity if zipCode is different', async () => {
+      const createdDoctor = await createFakeDoctor();
+      const address = addressFactory.newAddressEntity();
+
+      jest.spyOn(doctorRepository, 'findOne').mockImplementationOnce(() =>
+        Promise.resolve({
+          ...createdDoctor,
+          addressId: {
+            zipCode: '12345678',
+          },
+        }),
+      );
+
+      addressesService.create = jest.fn().mockReturnValueOnce(null);
+
+      addressesService.findByCep = jest.fn().mockResolvedValueOnce(address);
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+
+
+      const result = await doctorService.update(1, createdDoctor);
+
+      expect(result).toEqual('Médico atualizado com sucesso');
+      expect(doctorSpecialtiesService.update).toHaveBeenCalledTimes(1);
+      expect(addressesService.create(createdDoctor)).toBe(undefined);
+      expect(addressesService.findByCep).toHaveBeenCalledTimes(1);
+    });
+
+    it('should update doctor crm if it is different', async () => {
+      const createdDoctor = await createFakeDoctor();
+
+      jest.spyOn(doctorRepository, 'findOne').mockImplementationOnce(() =>
+        Promise.resolve({
+          ...createdDoctor,
+          addressId: {
+            zipCode: createdDoctor.zipCode,
+          },
+          crm: '123456',
+        }),
+      );
+
+      addressesService.create = jest.fn().mockReturnValueOnce(null);
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+      
+      jest.spyOn(spy, 'checkIfExists').mockReturnValueOnce(null);
+
+      const result = await doctorService.update(1, createdDoctor);
+
+      expect(result).toEqual('Médico atualizado com sucesso');
+      expect(doctorSpecialtiesService.update).toHaveBeenCalledTimes(1);
+      expect(addressesService.create(createdDoctor)).toBe(null);
+      expect(spy.checkIfExists(createdDoctor)).toBe(null);
+    });
+
+    it('should throw an exception if doctor crm is already in use', async () => {
+      const createdDoctor = await createFakeDoctor();
+
+      jest.spyOn(doctorRepository, 'findOne').mockImplementationOnce(() =>
+        Promise.resolve({
+          ...createdDoctor,
+          addressId: {
+            zipCode: createdDoctor.zipCode,
+          },
+          crm: '123456',
+        }),
+      );
+
+      addressesService.create = jest.fn().mockResolvedValueOnce(null)
+
+      const spy = new DoctorsService(
+        doctorRepository,
+        addressesService,
+        doctorSpecialtiesService,
+      );
+    
+      jest.spyOn(spy, 'checkIfExists').mockRejectedValueOnce(new Error());
+
+      await spy
+        .update(1, createdDoctor)
+        .catch((e) => {
+          expect(e).toBeInstanceOf(HttpException);
+        })
+        .then((data) => {
+          expect(data).toBeUndefined();
+        });
+    });
+  });
+
+  describe('delete', () => {
+    it('should be defined', () => {
+      expect(doctorService.remove).toBeDefined();
+    });
+
+    it('should soft delete a doctor entity successfully', async () => {
+      doctorRepository.softDelete = jest.fn().mockResolvedValueOnce({
+        raw: {
+          affectedRows: 1,
+        }
+      });
+
+      const result = await doctorService.remove(1);
+
+      expect(result).toEqual('Médico deletado com sucesso');
+    });
+
+    it('should throw an exception if doctor does not exist', async () => {
+      doctorRepository.update = jest.fn().mockResolvedValueOnce({
+        affected: 0,
+      });
+
+      await doctorService
+        .remove(1)
+        .catch((e) => {
+          expect(e).toBeInstanceOf(TypeError);
+        })
+        .then((data) => {
+          expect(data).toBeUndefined();
+        });
+    });
+  });
+
+  describe('checkIfDoctorExists', () => {
+    it('should be defined', () => {
+      expect(doctorService.checkIfExists).toBeDefined();
+    });
+
+    it('should return null if the doctor does not exist', async () => {
+      const doctor = await createFakeDoctor();
+
+      jest.spyOn(doctorRepository, 'findOne').mockResolvedValueOnce(null);
+
+      const result = await doctorService.checkIfExists(doctor);
+
+      expect(result).toBe(undefined);
+      expect(doctorRepository.findOne).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw an error if doctor already exists', () => {
+      jest
+        .spyOn(doctorRepository, 'findOne')
+        .mockImplementationOnce(() => createFakeDoctor());
+
+      expect(doctorService.checkIfExists(createFakeDoctor())).rejects.toThrow(
+        'Médico já cadastrado',
+      );
     });
   });
 });
