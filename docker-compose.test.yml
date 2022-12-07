@@ -7,7 +7,7 @@ services:
     container_name: app
     ports:
       - ${API_PORT}:${API_PORT}
-    command: npm run typeorm:run && npm run seed:run && jest
+    command: npm run script:test
     restart: always
     environment:
       - TYPEORM_CONNECTION=mysql

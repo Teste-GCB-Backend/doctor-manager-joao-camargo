@@ -8,7 +8,7 @@ on:
 name: Build and Deploy
 jobs:
   build:
-    runs-on: [self-hosted,aws]
+    runs-on: [self-hosted,ec2]
     timeout-minutes: 20
     env: 
       NODE_ENV: production
