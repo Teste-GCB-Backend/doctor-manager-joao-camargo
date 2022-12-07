@@ -124,7 +124,7 @@ DELETE /doctors/:id
 
 ## 🏁 Rodando a aplicação
 
-Certifique-se que voce tem a ultima versão estável do [Docker](https://www.docker.com/) rodando localmente.
+Certifique-se que voce possui [Docker](https://www.docker.com/) e todas suas dependências rodando localmente. Durante o desenvolvimento foi utilizada a versão 20.10.12.
 
 Primeiro, faça o clone desse repositório na sua maquina:
 
@@ -136,10 +136,10 @@ git clone https://github.com/Teste-GCB-Backend/doctor-manager-joao-camargo.git
 O segundo passo é substituir o nome do arquivo '.env.example' para '.env'. Certifique-se de que a porta indicada no .env está disponivel.
 
 
-Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
+Depois, dentro da pasta raiz, rode o seguinte comando para iniciar o container.
 
 ```
-docker-compose up
+docker-compose up --build
 ```
 
 Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. Certifique-se de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
@@ -153,7 +153,7 @@ Pronto! A aplicação estará rodando na porta 3000.
 
 ## 🏁 Rodando os testes
 
-Certifique-se que voce tem a ultima versão estável do [Docker](https://www.docker.com/) rodando localmente.
+Certifique-se que voce possui [Docker](https://www.docker.com/) e todas suas dependências rodando localmente. Durante o desenvolvimento foi utilizada a versão 20.10.12.
 
 Primeiro, faça o clone desse repositório na sua maquina:
 
@@ -177,10 +177,6 @@ Depois, dentro da pasta, rode o seguinte comando para iniciar o container.
 npm run test:docker-local
 ```
 
-Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. Certifique-se de que as migrations e a seed será executada automaticamente. Caso contrário, no bash do container execute:
-
-```
-npm run typeorm:run && npm run seed:run
-```
+Acompanhe os logs do container, a aplicação deve aguardar o banco de dados estar aceitando conexão, porém pode ocorrer dela tentar conectar ao banco de dados antes dele estar pronto. Nesse caso, aperecerá um erro e em alguns segundos ela tentará se conectar novamente. Se o erro persistir, verifique qual o apontamento para o banco de dados no arquivo .env. 
 
 Pronto! Os testes serão executados.
