@@ -7,7 +7,7 @@ services:
     container_name: app
     ports:
       - ${API_PORT}:${API_PORT}
-    command: bash -c "npm run test"
+    command: yarn test -u
     restart: always
     environment:
       - TYPEORM_CONNECTION=mysql
