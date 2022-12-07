@@ -181,7 +181,7 @@ describe('doctors controller (e2e)', () => {
           cellphone: doctor.cellphone,
           addressId: new Addresses(address),
         });
-      console.log(doctorCreated);
+
       doctor.name = 'teste';
       doctor.crm = '1234567';
 
@@ -226,17 +226,17 @@ describe('doctors controller (e2e)', () => {
         .send();
 
       expect(promise.status).toBe(200);
-      expect(promise.text).toBe('Médico deletado com sucesso.');
+      expect(promise.text).toBe('Médico deletado com sucesso');
     });
 
     it('should throw an error if the doctor does not exist', async () => {
       const promise = await request(app.getHttpServer())
-        .delete(`/doctors/1`)
+        .delete(`/doctors/999999999999`)
         .send();
 
       expect(promise.status).toBe(404);
       expect(promise.text).toBe(
-        '{"statusCode":404,"message":"Médico não encontrado."}',
+        '{"statusCode":404,"message":"Médico não encontrado"}',
       );
     });
   });

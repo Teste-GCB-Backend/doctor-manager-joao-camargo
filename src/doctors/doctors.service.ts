@@ -111,7 +111,7 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
         'doctorSpecialty.specialtyId',
       ],
     });
-    
+
     if (!findDoctor)
       throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
 
@@ -147,7 +147,9 @@ export class DoctorsService extends TypeOrmQueryService<Doctors> {
   async remove(id: number) {
     const deletedDoctor = await this.doctorsRepository.softDelete(id);
 
-    if (deletedDoctor.raw.affectedRows === 0)
+    console.log(deletedDoctor)
+
+    if (deletedDoctor?.affected === 0)
       throw new HttpException('Médico não encontrado', HttpStatus.NOT_FOUND);
 
     return 'Médico deletado com sucesso';
